@@ -1,0 +1,68 @@
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="lib/channel-manager.js"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <div id="app1"></div>
+
+    <form class="form-inline">
+      <div class="form-group mx-sm-3 mb-2">
+        <input class="form-control" placeholder="Todo name" id="todo-name" />
+      </div>
+      <button type="submit" class="btn btn-danger mb-2" id="remove-btn">
+        Remove
+      </button>
+    </form>
+    <script>
+      // Real api service from parent
+      const apiService = {
+        create: () => console.log("parent creating..."),
+        remove: () => console.log("parent removing"),
+      };
+      const microBaseUrl = "http://localhost:9090/";
+
+      fetch(microBaseUrl + "asset-manifest.json")
+        .then((response) => response.json())
+        .then((manifest) => import(microBaseUrl + manifest.entrypoints[0]))
+        .then((module) => {
+          module["microApp"](
+            // This is the MicroApp function
+            microBaseUrl,
+            // Prop drill object
+            {
+              title: "Hello App1 Todo demo",
+              id: "app1",
+              ChannelManager,
+              apiService,
+            },
+            document.getElementById("app")
+          );
+          // This is the MicroApp function
+          module["microApp"](
+            microBaseUrl,
+            // Prop drill object
+            {
+              title: "Hola App2 Todo - copycat!!!",
+              id: "app2",
+              ChannelManager,
+              apiService,
+            },
+            document.getElementById("app1")
+          );
+        });
+    </script>
+    <script>
+      $("#remove-btn").click(function (e) {
+        e.preventDefault();
+        const todoName = $("#todo-name").val();
+        ChannelManager.pub("parent:app1:todo:delete", todoName);
+      });
+    </script>
+  </body>
+</html>

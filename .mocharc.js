@@ -1,0 +1,15 @@
+module.exports = {
+  diff: true,
+  extension: ["js", "jsx", "ts", "tsx"],
+  package: "./package.json",
+  reporter: "spec",
+  slow: 75,
+  timeout: 2000,
+  ui: "bdd",
+  require: ["mocha/register.js", "mocha/setup.js"],
+  "watch-files": ["src"],
+  reporter: "min",
+  spec: ["src/**/*.test.tsx"],
+  recursive: true,
+  watch: true,
+};

@@ -1,0 +1,19 @@
+.todoComponent__itemName {
+  margin-right: 4px;
+}
+
+.todoComponent__container {
+  display: flex;
+
+  &.done .todoComponent__itemName {
+    text-decoration: line-through;
+  }
+}
+
+.todoComponent__container {
+  span,
+  button {
+    flex: 1;
+    align-content: space-between;
+  }
+}
